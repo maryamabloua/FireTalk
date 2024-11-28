@@ -158,12 +158,13 @@ Ce workflow est conçu pour structurer le développement et permettre une intég
 - [x] Configuration de la structure de base du projet :
   - [x] Création des dossiers pour les composants, pages et styles.
   - [x] Ajout des dépendances nécessaires (React Router, etc.).
-- [ ] Développement de l'interface utilisateur :
-  - [ ] Écran de connexion et d'inscription (statique).
-  - [ ] Liste des salons de discussion avec données statiques.
+- [x] Développement de l'interface utilisateur :
+  - [x] Écran de connexion et d'inscription (statique).
+  - [x] Liste des salons de discussion avec données statiques.
 
 ### **Routage et UI avancée**
-- [ ] Mise en place du routage avec React Router.
+- [x] Mise en place du routage avec React Router.
+- [ ] PoC du routage avec boutons basiques.
 - [ ] Configuration initiale de Firebase dans le projet.
 - [ ] Création de la page de discussion :
   - [ ] Interface pour l’envoi et l’affichage de messages (statique).
