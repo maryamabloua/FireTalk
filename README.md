@@ -164,13 +164,15 @@ Ce workflow est conçu pour structurer le développement et permettre une intég
 
 ### **Routage et UI avancée**
 - [x] Mise en place du routage avec React Router.
-- [ ] PoC du routage avec boutons basiques.
-- [ ] Configuration initiale de Firebase dans le projet.
-- [ ] Création de la page de discussion :
-  - [ ] Interface pour l’envoi et l’affichage de messages (statique).
+- [ ] Création de la page de discussion pour l’envoi et l’affichage de messages (statique).
+- [ ] Refactorisation : création de composants pour les éléments réutilisables.
+- [ ] PoC du routage avec boutons basiques (Connexion → Liste des salons).
 
 ### **Intégration de Firebase**
-- [ ] Configuration complète de Firebase.
+- [ ] Configuration complète de Firebase :
+  - [ ] Création du projet Firebase.
+  - [ ] Ajout des clés de configuration dans l'application.
+  - [ ] Initialisation des services nécessaires (Authentication, Firestore, Realtime Database).
 - [ ] Implémentation de Firebase Authentication :
   - [ ] Inscription et connexion des utilisateurs.
   - [ ] Gestion des erreurs (ex : utilisateur déjà existant).
