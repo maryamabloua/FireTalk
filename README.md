@@ -155,9 +155,9 @@ Ce workflow est conçu pour structurer le développement et permettre une intég
 
 ### **Initialisation du projet**
 - [x] Initialisation du projet avec React et Vite.
-- [ ] Configuration de la structure de base du projet :
-  - [ ] Création des dossiers pour les composants, pages et styles.
-  - [ ] Ajout des dépendances nécessaires (React Router, etc.).
+- [x] Configuration de la structure de base du projet :
+  - [x] Création des dossiers pour les composants, pages et styles.
+  - [x] Ajout des dépendances nécessaires (React Router, etc.).
 - [ ] Développement de l'interface utilisateur :
   - [ ] Écran de connexion et d'inscription (statique).
   - [ ] Liste des salons de discussion avec données statiques.
