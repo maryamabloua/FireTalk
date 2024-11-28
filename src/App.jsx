@@ -1,11 +1,18 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
+import ChatRoomsPage from './pages/ChatRoomsPage'
+import ChatRoomPage from './pages/ChatRoomPage'
 import './App.css'
 
 function App() {
   return (
-    <div id="root">
-      <h1>Welcome to FireTalk</h1>
-      <p>Votre application de chat en temps réel avec React et Firebase.</p>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/chat-rooms" element={<ChatRoomsPage />} />
+        <Route path="/chat-room/:id" element={<ChatRoomPage />} />
+      </Routes>
+    </Router>
   )
 }
 
