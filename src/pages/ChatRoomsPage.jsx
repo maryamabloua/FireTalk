@@ -12,25 +12,34 @@ const ChatRoomsPage = () => {
 
   // Initialiser les salons dans LocalStorage si nécessaire
   const initializeChatRooms = () => {
-
-    // Définir des salons par défaut : seront ajoutés si aucune donnée présente dans LocalStorage
     const defaultRooms = [
-      { id: 1, name: "Général", description: "Discussions générales", participants: 12 },
-      { id: 2, name: "Gaming", description: "Discussions sur les jeux", participants: 15 },
-      { id: 3, name: "Informatique", description: "Discussions sur l'informatique", participants: 7 },
+        { id: 1, name: "Général", description: "Discussions générales", participants: 12 },
+        { id: 2, name: "Gaming", description: "Discussions sur les jeux", participants: 15 },
+        { id: 3, name: "Informatique", description: "Discussions sur l'informatique", participants: 7 },
     ]
 
-    // Vérifier si des salons existent déjà dans LocalStorage
-    const storedRooms = JSON.parse(localStorage.getItem('chatRooms')) || defaultRooms // (clé : chatRooms pour récupérer salons stockés)
+    const defaultMessagesForGeneral = [
+        { id: 1, text: 'Bienvenue dans le salon Général !', user: 'Maryam', date: '2024-12-06T10:00:00Z' },
+        { id: 2, text: 'Salut tout le monde !', user: 'Victor', date: '2024-12-06T10:05:00Z' },
+    ]
 
-    // Sauvegarder les salons par défaut dans LocalStorage si aucune donnée n'existe
+    // Vérifie si des salons existent déjà dans LocalStorage
+    const storedRooms = JSON.parse(localStorage.getItem('chatRooms')) || defaultRooms
+
+    // Sauvegarder les salons par défaut si aucune donnée n'existe
     if (!localStorage.getItem('chatRooms')) {
-      localStorage.setItem('chatRooms', JSON.stringify(defaultRooms))
+        localStorage.setItem('chatRooms', JSON.stringify(defaultRooms))
+    }
+
+    // Vérifie si des messages existent déjà pour le salon "Général" (ID 1)
+    if (!localStorage.getItem('messages_1')) {
+        localStorage.setItem('messages_1', JSON.stringify(defaultMessagesForGeneral))
     }
 
     // Mettre à jour l'état local des salons avec les données récupérées (ou par défaut)
     setChatRooms(storedRooms)
-  }
+}
+
 
   // Charger les salons depuis LocalStorage au montage
   useEffect(() => {
