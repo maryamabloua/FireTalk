@@ -1,64 +1,60 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { getFromLocalStorage, saveToLocalStorage } from '../utils/localStorage'
 
-// Salon de discussion individuel //
+// Salon de discussion //
 
 const ChatRoomPage = () => {
-    // Récupère l'ID du salon (à partir de l'URL)
-    const { id } = useParams()
+  const { id } = useParams() // Récupère l'ID du salon (à partir de l'URL)
+  const [messages, setMessages] = useState([]) // État local pour les messages
 
-    // useState pour stocker les messages du salon
-    const [messages, setMessages] = useState([
-        { id: 1, text: 'Bienvenue dans le salon !', user: 'Maryam', date: '2024-12-06T14:00:00Z' },
-        { id: 2, text: 'Salut tout le monde !', user: 'Victor', date: '2024-12-06T14:05:00Z' },
-    ])
+  // Charger les messages depuis LocalStorage
+  useEffect(() => {
+    const storedMessages = getFromLocalStorage(`messages_${id}`) || [] // (clé : message_ID)
+    setMessages(storedMessages)
+  }, [id]) // Dépendance sur l'ID (fonction exécutée à chaque changement de salon)
 
-    // Fonction pour ajouter un message
+  // Fonction pour ajouter un nouveau message au salon
     const handleAddMessage = (text) => {
-        if (!text.trim()) { // Vérifie que le texte non vide ou composé uniquement d'espaces
-            return // Ne fait rien si invalide
-        }
+        if (!text.trim()) return // Ignore messages vides
+
         const newMessage = {
             id: messages.length + 1,
             text,
             user: 'Moi',
-            date: new Date().toISOString(),
+            date: new Date().toISOString()
         }
-        setMessages([...messages, newMessage]) // MaJ de la liste des messages
+
+        const updatedMessages = [...messages, newMessage] 
+        setMessages(updatedMessages) // Ajoute nv message à la liste existante
+        saveToLocalStorage(`messages_${id}`, updatedMessages) // Sauvegarde la liste mise à jour dans LocalStorage (clé : message_ID)
     }
 
-    // Effet pour simuler le chargement des messages du salon (dans la console) -> useEffect déclenché à chaque fois que l'ID du salon change (URL)
-    useEffect(() => {
-        console.log(`Chargement des messages pour le salon ID: ${id}`)
-        // Ici on pourra ajouter la logique pour charger les messages spécifiques à ce salon
-    }, [id]) // Dépendance sur id, sinon useEffect exécuté à chaque rendu (boucles infinies)
-
     return (
-        <div>
-            <h1>Salon {id}</h1>
-
-            {/* Liste des messages */}
-            <div>
-                {messages.map((message) => (
-                    <div key={message.id}>
-                        <span>{new Date(message.date).toLocaleString()} - <strong>{message.user}</strong>: {message.text}</span>  
-                    </div>
-                ))}
-            </div>
-
-            {/* Formulaire pour envoyer un message */}
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault() // Empêche de recharger la page lors de la soumission
-                    handleAddMessage(e.target.elements.message.value)
-                    e.target.reset()
-                }}
-            >
-                <input type="text" name="message" placeholder="Envoyer un message" />
-                <button type="submit">Envoyer</button>
-            </form>
-        </div>
-    )
+      <div>
+          <h1>Salon {id}</h1>
+          <div>
+              {messages.map((message) => (
+                  <div key={message.id}>
+                      <span>
+                          {new Date(message.date).toLocaleString()} -{' '}
+                          <strong>{message.user}</strong>: {message.text}
+                      </span>
+                  </div>
+              ))}
+          </div>
+          <form
+              onSubmit={(e) => {
+                  e.preventDefault()
+                  handleAddMessage(e.target.elements.message.value)
+                  e.target.reset()
+              }}
+          >
+              <input type="text" name="message" placeholder="Écrivez un message" />
+              <button type="submit">Envoyer</button>
+          </form>
+      </div>
+  )
 }
 
 export default ChatRoomPage
