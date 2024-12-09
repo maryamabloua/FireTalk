@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import WelcomeBanner from '../components/WelcomeBanner'
 import '../styles/ChatRoomsPage.css'
 
 // Liste des salons de discussion //
@@ -77,25 +76,21 @@ const ChatRoomsPage = () => {
 
   return (
     <div className="chat-rooms">
-      <div className="chat-rooms">
-        <WelcomeBanner />
-
-        {/* Liste des salons */}
-        <h1>Salons disponibles</h1>
-        <div className="rooms-list">
-          {chatRooms.map((room) => (
-            <div
-              key={room.id}
-              className="room-card"
-              onClick={() => handleRoomClick(room.id)}
-              style={{ cursor: 'pointer' }}
-            >
-              <h2>{room.name}</h2>
-              <p>{room.description}</p>
-              <span>{room.participants} participants</span>
-            </div>
-          ))}
-        </div>
+      {/* Liste des salons */}
+      <h1>Salons disponibles</h1>
+      <div className="rooms-list">
+        {chatRooms.map((room) => (
+          <div
+            key={room.id}
+            className="room-card"
+            onClick={() => handleRoomClick(room.id)}
+            style={{ cursor: 'pointer' }}
+          >
+            <h2>{room.name}</h2>
+            <p>{room.description}</p>
+            <span>{room.participants} participants</span>
+          </div>
+        ))}
       </div>
 
       <br />

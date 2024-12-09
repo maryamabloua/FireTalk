@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 import { getFromLocalStorage, saveToLocalStorage } from '../utils/localStorage'
 import { getCurrentUser } from '../utils/localStorage'
 import Message from '../components/Message'
-import WelcomeBanner from '../components/WelcomeBanner'
 import '../styles/ChatRoomPage.css'
 
 // Salon de discussion //
@@ -37,19 +36,19 @@ const ChatRoomPage = () => {
 
   return (
     <div className="chat-container">
-      <WelcomeBanner />
+      
 
-      {/* Liste des messages */}
       <div>
         {messages.map((message) => (
-          <div key={message.id} className="message">
-            <span>
-              {new Date(message.date).toLocaleString()} - <strong>{message.user}</strong>: {message.text}
-            </span>
-          </div>
+          <Message
+            key={message.id}
+            date={message.date}
+            user={message.user}
+            text={message.text}
+          />
         ))}
       </div>
-      
+
       <form
         onSubmit={(e) => {
           e.preventDefault()
