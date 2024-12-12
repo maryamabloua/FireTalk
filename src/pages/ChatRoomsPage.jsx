@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCurrentUser, clearCurrentUser } from '../utils/localStorage'
 import '../styles/ChatRoomsPage.css'
 
 // Liste des salons de discussion //
@@ -10,7 +9,6 @@ const ChatRoomsPage = () => {
   const [newRoomName, setNewRoomName] = useState('')
   const [newRoomDescription, setNewRoomDescription] = useState('')
   const navigate = useNavigate() // Hook pour naviguer entre les pages
-  const currentUser = getCurrentUser() // Récupère l'utilisateur connecté
 
   // Initialiser les salons dans LocalStorage si nécessaire
   const initializeChatRooms = () => {
@@ -28,12 +26,12 @@ const ChatRoomsPage = () => {
     const defaultMessagesForGeneral = [
       { id: 1, text: 'Bienvenue dans le salon Général !', user: 'Maryam', date: '2024-12-06T10:00:00Z' },
       { id: 2, text: 'Salut tout le monde !', user: 'Victor', date: '2024-12-06T10:05:00Z' },
-  ]
+    ]
 
     // Vérifie si des messages existent déjà pour le salon "Général" (ID 1)
     if (!localStorage.getItem('messages_1')) {
       localStorage.setItem('messages_1', JSON.stringify(defaultMessagesForGeneral))
-  }
+    }
 
     // Sauvegarder les salons par défaut dans LocalStorage si aucune donnée n'existe
     if (!localStorage.getItem('chatRooms')) {
@@ -76,22 +74,8 @@ const ChatRoomsPage = () => {
     navigate(`/chat-room/${id}`)
   }
 
-  // Déconnecter l'utilisateur (redirige vers la page de connexion)
-  const handleLogout = () => {
-    clearCurrentUser()
-    navigate('/')
-  }
-
   return (
     <div className="chat-rooms">
-      {/* Message de bienvenue */}
-      {currentUser && (
-        <div className="welcome-banner">
-          <p>Bienvenue, <strong>{currentUser.name}</strong> !</p>
-          <button onClick={handleLogout} className="logout-button">Se déconnecter</button>
-        </div>
-      )}
-
       {/* Liste des salons */}
       <h1>Salons disponibles</h1>
       <div className="rooms-list">
@@ -99,7 +83,7 @@ const ChatRoomsPage = () => {
           <div
             key={room.id}
             className="room-card"
-            onClick={() => handleRoomClick(room.id)} // Un clic redirige vers le salon
+            onClick={() => handleRoomClick(room.id)}
             style={{ cursor: 'pointer' }}
           >
             <h2>{room.name}</h2>
