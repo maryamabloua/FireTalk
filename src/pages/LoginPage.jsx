@@ -1,11 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { setCurrentUser } from '../utils/localStorage'
+import { getCurrentUser, setCurrentUser } from '../utils/localStorage'
 import '../styles/LoginPage.css'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('') // État pour stocker le nom d'utilisateur
   const navigate = useNavigate() // Hook pour rediriger après connexion
+
+  // Vérifie si l'utilisateur est déjà connecté
+  useEffect(() => {
+    const currentUser = getCurrentUser()
+    if (currentUser) {
+      navigate('/chat-rooms') // Redirige vers les salons
+    }
+  }, [navigate])
 
   // Soumission du formulaire
   const handleLogin = (e) => {
