@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getFromLocalStorage, saveToLocalStorage, initializeDefaultData } from '../utils/localStorage'
+import RoomCard from '../components/RoomCard'
 import '../styles/ChatRoomsPage.css'
 
 // Liste des salons de discussion //
@@ -10,41 +12,11 @@ const ChatRoomsPage = () => {
   const [newRoomDescription, setNewRoomDescription] = useState('')
   const navigate = useNavigate() // Hook pour naviguer entre les pages
 
-  // Initialiser les salons dans LocalStorage si nécessaire
-  const initializeChatRooms = () => {
-
-    // Définir des salons par défaut : seront ajoutés si aucune donnée présente dans LocalStorage
-    const defaultRooms = [
-      { id: 1, name: "Général", description: "Discussions générales", participants: 12 },
-      { id: 2, name: "Gaming", description: "Discussions sur les jeux", participants: 15 },
-      { id: 3, name: "Informatique", description: "Discussions sur l'informatique", participants: 7 },
-    ]
-
-    // Vérifier si des salons existent déjà dans LocalStorage
-    const storedRooms = JSON.parse(localStorage.getItem('chatRooms')) || defaultRooms // (clé : chatRooms pour récupérer salons stockés)
-
-    const defaultMessagesForGeneral = [
-      { id: 1, text: 'Bienvenue dans le salon Général !', user: 'Maryam', date: '2024-12-06T10:00:00Z' },
-      { id: 2, text: 'Salut tout le monde !', user: 'Victor', date: '2024-12-06T10:05:00Z' },
-    ]
-
-    // Vérifie si des messages existent déjà pour le salon "Général" (ID 1)
-    if (!localStorage.getItem('messages_1')) {
-      localStorage.setItem('messages_1', JSON.stringify(defaultMessagesForGeneral))
-    }
-
-    // Sauvegarder les salons par défaut dans LocalStorage si aucune donnée n'existe
-    if (!localStorage.getItem('chatRooms')) {
-      localStorage.setItem('chatRooms', JSON.stringify(defaultRooms))
-    }
-
-    // Mettre à jour l'état local des salons avec les données récupérées (ou par défaut)
-    setChatRooms(storedRooms)
-  }
-
-  // Charger les salons depuis LocalStorage au montage
+  // Charger les salons depuis LocalStorage
   useEffect(() => {
-    initializeChatRooms()
+    initializeDefaultData() // Initialise les données par défaut si nécessaire
+    const storedRooms = getFromLocalStorage('chatRooms') || []
+    setChatRooms(storedRooms)
   }, [])
 
   // Fonction pour ajouter un nouveau salon
@@ -58,12 +30,12 @@ const ChatRoomsPage = () => {
       id: chatRooms.length + 1,
       name: newRoomName,
       description: newRoomDescription,
-      participants: 0, // Pas de participants pour le moment
+      participants: [],
     }
 
     const updatedRooms = [...chatRooms, newRoom]
     setChatRooms(updatedRooms)
-    localStorage.setItem('chatRooms', JSON.stringify(updatedRooms)) // Sauvegarde les salons
+    saveToLocalStorage('chatRooms', updatedRooms)
 
     setNewRoomName('')
     setNewRoomDescription('')
@@ -80,16 +52,14 @@ const ChatRoomsPage = () => {
       <h1>Salons disponibles</h1>
       <div className="rooms-list">
         {chatRooms.map((room) => (
-          <div
+          <RoomCard
             key={room.id}
-            className="room-card"
-            onClick={() => handleRoomClick(room.id)}
-            style={{ cursor: 'pointer' }}
-          >
-            <h2>{room.name}</h2>
-            <p>{room.description}</p>
-            <span>{room.participants} participants</span>
-          </div>
+            id={room.id}
+            name={room.name}
+            description={room.description}
+            participants={room.participants.length}
+            onClick={handleRoomClick}
+          />
         ))}
       </div>
 

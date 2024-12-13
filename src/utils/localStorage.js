@@ -1,3 +1,18 @@
+import { DEFAULT_ROOMS, DEFAULT_MESSAGES } from '../constants/defaultData'
+
+// Initialiser les salons et messages par défaut (initialisation)
+export const initializeDefaultData = () => {
+    if (!localStorage.getItem('chatRooms')) {
+      localStorage.setItem('chatRooms', JSON.stringify(DEFAULT_ROOMS))
+    }
+  
+    Object.entries(DEFAULT_MESSAGES).forEach(([roomId, messages]) => {
+      if (!localStorage.getItem(`messages_${roomId}`)) {
+        localStorage.setItem(`messages_${roomId}`, JSON.stringify(messages))
+      }
+    })
+  }
+
 // Lire une donnée depuis LocalStorage
 export const getFromLocalStorage = (key) => {
     const data = localStorage.getItem(key)
@@ -18,7 +33,8 @@ export const removeFromLocalStorage = (key) => {
 
 // Récupérer l'utilisateur connecté depuis LocalStorage
 export const getCurrentUser = () => {
-    return JSON.parse(localStorage.getItem('currentUser'))
+    const user = localStorage.getItem('currentUser')
+    return user ? JSON.parse(user) : null
 }
 
 // Sauvegarder l'utilisateur connecté dans LocalStorage
