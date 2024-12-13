@@ -1,15 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import LoginPage from './pages/LoginPage'
-import ChatRoomsPage from './pages/ChatRoomsPage'
-import ChatRoomPage from './pages/ChatRoomPage'
-import { getCurrentUser } from './utils/localStorage'
-import WelcomeBanner from './components/WelcomeBanner'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import ChatRoomsPage from './pages/ChatRoomsPage';
+import ChatRoomPage from './pages/ChatRoomPage';
+import WelcomeBanner from './components/WelcomeBanner';
+import { getCurrentUser } from './utils/localStorage';
+import './App.css';
 
 function App() {
-  const currentUser = getCurrentUser() // Récupère l'utilisateur connecté
+  const currentUser = getCurrentUser();
 
-  // Vérifie si un utilisateur est connecté avant de permettre l'accès à certaines pages
+  console.log('Utilisateur actuel dans App:', currentUser); // Log pour déboguer
+
   return (
     <Router>
       {currentUser && <WelcomeBanner />}
@@ -18,15 +19,15 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route
           path="/chat-rooms"
-          element={currentUser ? <ChatRoomsPage /> : <Navigate to="/" />}
+          element={currentUser ? <ChatRoomsPage /> : <Navigate to="/" replace />}
         />
         <Route
           path="/chat-room/:id"
-          element={currentUser ? <ChatRoomPage /> : <Navigate to="/" />}
+          element={currentUser ? <ChatRoomPage /> : <Navigate to="/" replace />}
         />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

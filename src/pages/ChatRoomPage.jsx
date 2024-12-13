@@ -1,32 +1,53 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { getFromLocalStorage, saveToLocalStorage } from '../utils/localStorage'
 import { getCurrentUser } from '../utils/localStorage'
 import Message from '../components/Message'
 import ParticipantsList from '../components/ParticipantsList'
 import '../styles/ChatRoomPage.css'
 
-// Salon de discussion //
-
 const ChatRoomPage = () => {
-  const { id } = useParams() // Récupère l'ID du salon (à partir de l'URL)
+  const { id } = useParams() // Récupère l'ID du salon
   const [messages, setMessages] = useState([]) // État local pour les messages
-  const [participants, setParticipants] = useState([])
+  const [participants, setParticipants] = useState([]) // État local pour les participants
   const currentUser = getCurrentUser()
+  const navigate = useNavigate()
 
   // Charger les messages et les participants depuis LocalStorage
   useEffect(() => {
-    const storedMessages = getFromLocalStorage(`messages_${id}`) || [] // (clé : message_ID)
-    const storedRooms = getFromLocalStorage('chatRooms') || []
+    if (!currentUser) {
+      navigate('/') // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+      return
+    }
+
+    const storedMessages = getFromLocalStorage(`messages_${id}`) || [] // Messages stockés
+    const storedRooms = getFromLocalStorage('chatRooms') || [] // Récupérer les salons
     const currentRoom = storedRooms.find((room) => room.id === parseInt(id))
 
     setMessages(storedMessages)
     setParticipants(currentRoom?.participants || [])
-  }, [id]) // Dépendance sur l'ID (fonction exécutée à chaque changement de salon)
 
-  // Fonction pour ajouter un nouveau message au salon
+    // Ajouter l'utilisateur courant aux participants
+    if (currentRoom && currentUser && !currentRoom.participants.includes(currentUser.name)) {
+      currentRoom.participants.push(currentUser.name)
+      saveToLocalStorage('chatRooms', storedRooms)
+      setParticipants(currentRoom.participants) // Mettre à jour l'état local
+    }
+
+    // Retirer l'utilisateur courant des participants lors de la sortie
+    return () => {
+      if (currentRoom && currentUser) {
+        currentRoom.participants = currentRoom.participants.filter(
+          (participant) => participant !== currentUser.name
+        )
+        saveToLocalStorage('chatRooms', storedRooms)
+      }
+    }
+  }, [id, currentUser, navigate]) // Dépendance sur l'ID, l'utilisateur et la navigation
+
+  // Fonction pour ajouter un nouveau message
   const handleAddMessage = (text) => {
-    if (!text.trim()) return // Ignore messages vides
+    if (!text.trim()) return // Ignore les messages vides
 
     const newMessage = {
       id: messages.length + 1,
@@ -36,8 +57,8 @@ const ChatRoomPage = () => {
     }
 
     const updatedMessages = [...messages, newMessage]
-    setMessages(updatedMessages) // Ajoute nv message à la liste existante
-    saveToLocalStorage(`messages_${id}`, updatedMessages) // Sauvegarde la liste mise à jour dans LocalStorage (clé : message_ID)
+    setMessages(updatedMessages) // Ajoute le nouveau message à l'état
+    saveToLocalStorage(`messages_${id}`, updatedMessages) // Sauvegarde dans le LocalStorage
   }
 
   return (

@@ -1,35 +1,31 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getCurrentUser, setCurrentUser } from '../utils/localStorage'
-import '../styles/LoginPage.css'
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getCurrentUser, setCurrentUser } from '../utils/localStorage';
+import '../styles/LoginPage.css';
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('') // État pour stocker le nom d'utilisateur
-  const navigate = useNavigate() // Hook pour rediriger après connexion
+  const [username, setUsername] = useState(''); // État pour le nom d'utilisateur
+  const navigate = useNavigate(); // Hook pour rediriger après connexion
 
-  // Vérifie si l'utilisateur est déjà connecté
   useEffect(() => {
-    const currentUser = getCurrentUser()
+    const currentUser = getCurrentUser();
+    console.log('Utilisateur actuel dans LoginPage:', currentUser); // Log pour déboguer
     if (currentUser) {
-      navigate('/chat-rooms') // Redirige vers les salons
+      navigate('/chat-rooms', { replace: true }); // Redirige si déjà connecté
     }
-  }, [navigate])
+  }, []); // Exécuté une seule fois au montage
 
-  // Soumission du formulaire
   const handleLogin = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!username.trim()) {
-      alert('Veuillez entrer un nom d\'utilisateur valide')
-      return
+      alert('Veuillez entrer un nom d\'utilisateur valide');
+      return;
     }
 
-    // Sauvegarde l'utilisateur dans LocalStorage
-    setCurrentUser({ name: username })
-
-    // Redirige vers la liste des salons
-    navigate('/chat-rooms')
-  }
+    setCurrentUser({ name: username }); // Enregistre l'utilisateur
+    navigate('/chat-rooms', { replace: true }); // Redirige après connexion
+  };
 
   return (
     <div className="login-container">
@@ -46,7 +42,7 @@ const LoginPage = () => {
         <button type="submit" className="login-button">Se connecter</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
