@@ -8,30 +8,25 @@ import '../styles/ChatRoomPage.css'
 
 const ChatRoomPage = () => {
   const { id } = useParams() // Récupère l'ID du salon
-  const [messages, setMessages] = useState([]) // État local pour les messages
-  const [participants, setParticipants] = useState([]) // État local pour les participants
+  const [messages, setMessages] = useState([])
+  const [participants, setParticipants] = useState([])
   const currentUser = getCurrentUser()
   const navigate = useNavigate()
 
   // Charger les messages et les participants depuis LocalStorage
   useEffect(() => {
-    if (!currentUser) {
-      navigate('/') // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
-      return
-    }
-
-    const storedMessages = getFromLocalStorage(`messages_${id}`) || [] // Messages stockés
-    const storedRooms = getFromLocalStorage('chatRooms') || [] // Récupérer les salons
+    const storedMessages = getFromLocalStorage(`messages_${id}`) || []
+    const storedRooms = getFromLocalStorage('chatRooms') || []
     const currentRoom = storedRooms.find((room) => room.id === parseInt(id))
 
     setMessages(storedMessages)
     setParticipants(currentRoom?.participants || [])
 
     // Ajouter l'utilisateur courant aux participants
-    if (currentRoom && currentUser && !currentRoom.participants.includes(currentUser.name)) {
+    if (currentRoom && currentUser && !currentRoom.participants.includes(currentUser.name)) { 
       currentRoom.participants.push(currentUser.name)
       saveToLocalStorage('chatRooms', storedRooms)
-      setParticipants(currentRoom.participants) // Mettre à jour l'état local
+      setParticipants(currentRoom.participants)
     }
 
     // Retirer l'utilisateur courant des participants lors de la sortie
@@ -43,7 +38,8 @@ const ChatRoomPage = () => {
         saveToLocalStorage('chatRooms', storedRooms)
       }
     }
-  }, [id, currentUser, navigate]) // Dépendance sur l'ID, l'utilisateur et la navigation
+  }, [id, currentUser?.name, navigate]) // Dépendance sur l'ID, l'utilisateur et la navigation
+  // currentUser?.name évite boucle infini =/= currentUser (propriété plus stable)
 
   // Fonction pour ajouter un nouveau message
   const handleAddMessage = (text) => {
