@@ -1,0 +1,29 @@
+.participants-list {
+    position: fixed;
+    right: 20px;
+    top: 100px; /* Ajuster selon la bannière ou le layout */
+    width: 200px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .participants-list h3 {
+    margin-top: 0;
+    font-size: 16px;
+    color: #007bff;
+  }
+  
+  .participants-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .participants-list li {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+  
