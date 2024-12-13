@@ -1,0 +1,42 @@
+  .create-room-button {
+    background-color: #007bff;
+    border: none;
+  }
+  
+  .create-room-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .rooms-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  
+  .room-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .room-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .room-card h2 {
+    color: #007bff;
+  }
+  
+  .room-card p {
+    color: #666;
+  }
+  
+  .room-card span {
+    font-size: 0.7rem;
+    color: #999;
+  }
+  
+  
